@@ -30,6 +30,7 @@ function Addscreen({ navigation }) {
         const currentDate = selectedDate;
         setDate(currentDate);
     };
+    
 
     const showMode = (currentMode) => {
         DateTimePickerAndroid.open({
@@ -59,11 +60,10 @@ function Addscreen({ navigation }) {
                 data={actionData}
                 save="value"
             />
-
-
             <TextInput
                 style={styles.text_input}
                 value={amount}
+                keyboardType='number-pad'
                 placeholder="Amount"
                 onChange={(e) => { setAmount(e.target.value) }}
             />
@@ -78,14 +78,16 @@ function Addscreen({ navigation }) {
             <View
                 style={styles.text_input}>
                 <Text style={styles.txt_item}>{date.toLocaleDateString()}</Text>
-                <View style={{ flex: 1, alignItems: 'center', position: 'absolute', left: '90%'}}>
+                <View style={{ flex: 1, alignItems: 'center', position: 'absolute', left: '90%' }}>
                     <FontAwesome.Button name="calendar" size={25} color="#3b5998" backgroundColor="transparent" onPress={showDatepicker} />
                 </View>
             </View>
+            
 
             <TextInput
                 style={styles.text_input}
                 value={strickPrice}
+                keyboardType='number-pad'
                 placeholder="Strick price"
                 onPress={showDatepicker}
                 onChange={(e) => { setStrickPrice(e.target.value) }}
@@ -101,6 +103,7 @@ function Addscreen({ navigation }) {
             <TextInput
                 style={styles.text_input}
                 value={stockGive}
+                keyboardType='number-pad'
                 placeholder="Price"
                 onChange={(e) => { setStockGive(e.target.value) }}
             />
