@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import DatePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker'; //ios
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 
 function Addscreen({ navigation }) {
 
     const [option, setOption] = useState();
     const [selected, setSelected] = React.useState("");
-    const [currentState, setCurrentState] = useState(1);
-    const [actionDateStart, setActionDateStart] = useState(new Date())
 
     const [actionSell, setActionSell] = useState("");
     const [actionCallPut, setActionCallPut] = useState("");
-    const [actionDate, setActionDate] = useState("");
     const [amount, setAmount] = useState("");
     const [stockName, setStockName] = useState("");
     const [strickPrice, setStrickPrice] = useState("");
@@ -24,6 +23,27 @@ function Addscreen({ navigation }) {
         { key: '1', value: 'Options', },
         { key: '2', value: 'Deposit/Others' },
     ]
+
+    const [date, setDate] = useState(new Date());
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setDate(currentDate);
+    };
+
+    const showMode = (currentMode) => {
+        DateTimePickerAndroid.open({
+            value: date,
+            onChange,
+            mode: currentMode,
+            is24Hour: true,
+        });
+    };
+
+    const showDatepicker = () => {
+        showMode('date');
+    };
+
 
     return (
         <View style={styles.form}>
@@ -55,41 +75,19 @@ function Addscreen({ navigation }) {
                 onChange={(e) => { setStockName(e.target.value) }}
             />
 
-            <TextInput
-                style={styles.text_input}
-                value={actionDate}
-                placeholder="Date"
-                onChange={(e) => { setActionDate(e.target.value) }}
-            />
-
-            <DatePicker
-                style={{ width: 200 }}
-                date={actionDateStart}
-                mode="date"
-                placeholder="select date"
-                format="YYYY-MM-DD"
-                minDate="2016-05-01"
-                maxDate="2022-06-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                    dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                    },
-                    dateInput: {
-                        marginLeft: 36
-                    }
-                }}
-                onDateChange={(e) => { setActionDate(e.target.value)  }}
-            />
+            <View
+                style={styles.text_input}>
+                <Text style={styles.txt_item}>{date.toLocaleDateString()}</Text>
+                <View style={{ flex: 1, alignItems: 'center', position: 'absolute', left: '90%'}}>
+                    <FontAwesome.Button name="calendar" size={25} color="#3b5998" backgroundColor="transparent" onPress={showDatepicker} />
+                </View>
+            </View>
 
             <TextInput
                 style={styles.text_input}
                 value={strickPrice}
                 placeholder="Strick price"
+                onPress={showDatepicker}
                 onChange={(e) => { setStrickPrice(e.target.value) }}
             />
 
