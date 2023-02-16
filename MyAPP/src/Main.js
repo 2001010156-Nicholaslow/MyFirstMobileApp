@@ -13,6 +13,8 @@ import SettingsScreen from "./screens/Settingscreen";
 import AddScreen from "./screens/Addscreen";
 import AddOptionscreen from "./screens/AddOptionscreen";
 import AddOtherscreen from "./screens/AddOthersceen";
+import Historyscreen from "./screens/Historyscreen";
+import Optionscreen from "./screens/Optionscreen";
 
 const HomeName = "Home";
 const PortName = "List";
@@ -20,6 +22,8 @@ const SettingsName = "Settings";
 const AddName = "Add";
 const AddOptionName = "Screen for Options";
 const AddOtherName = "Screen for Others";
+const HistoryName = "Historyscreen";
+const OptionName = "Optionscreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -46,7 +50,7 @@ const TabStack = () => {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarStyle: { padding: 2, height: "8%" },
+          tabBarStyle: { padding: 2, height: "8%"},
         })}
         tabBarOptions={{
           activeTintColor: 'blue',
@@ -55,7 +59,7 @@ const TabStack = () => {
         }}>
 
         <Tab.Screen name={HomeName} component={HomeScreen} options={{ header: () => null }}/>
-        <Tab.Screen name={PortName} component={PortScreem} />
+        <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null }}/>
         <Tab.Screen name={SettingsName} component={SettingsScreen} />
       </Tab.Navigator>
   );
@@ -66,11 +70,13 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home" headerMode="none">
         <Stack.Screen name={HomeName} component={TabStack} options={{ header: () => null }} /> 
-        <Stack.Screen name={PortName} component={PortScreem} options={{ header: () => null }}/>
+        <Stack.Screen name={PortName} component={PortScreem}  options={{ header: () => null }}/>
         <Stack.Screen name={SettingsName} component={SettingsScreen} options={{ header: () => null }}/>
         <Stack.Screen name={AddName} component={AddScreen} options={{ header: () => null }} />
         <Stack.Screen name={AddOptionName} component={AddOptionscreen} options={{ header: () => null }}/>
         <Stack.Screen name={AddOtherName} component={AddOtherscreen} options={{ header: () => null }}/>
+        <Stack.Screen name={HistoryName} component={Historyscreen} options={{ header: () => null }}/>
+        <Stack.Screen name={OptionName} component={Optionscreen} options={{ header: () => null }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
