@@ -11,11 +11,16 @@ import HomeScreen from "./screens/Homescreen";
 import PortScreem from "./screens/PortScreen";
 import SettingsScreen from "./screens/Settingscreen";
 import AddScreen from "./screens/Addscreen";
+import AddOptionscreen from "./screens/AddOptionscreen";
+import AddOtherscreen from "./screens/AddOthersceen";
 
 const HomeName = "Home";
 const PortName = "List";
 const SettingsName = "Settings";
-const AddName = "Add"
+const AddName = "Add";
+const AddOptionName = "Screen for Options";
+const AddOtherName = "Screen for Others";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,6 +69,8 @@ const App = () => {
         <Stack.Screen name={PortName} component={PortScreem} options={{ header: () => null }}/>
         <Stack.Screen name={SettingsName} component={SettingsScreen} options={{ header: () => null }}/>
         <Stack.Screen name={AddName} component={AddScreen} options={{ header: () => null }} />
+        <Stack.Screen name={AddOptionName} component={AddOptionscreen} options={{ header: () => null }}/>
+        <Stack.Screen name={AddOtherName} component={AddOtherscreen} options={{ header: () => null }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

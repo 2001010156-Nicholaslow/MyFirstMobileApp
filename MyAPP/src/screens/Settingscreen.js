@@ -8,6 +8,10 @@ export default function Settingscreen({navigation}){
                 onPress={() => navigation.navigate('Home')}
                 >Settings
             </Text>
+            <Text 
+                onPress={() => navigation.navigate('Screen for Options')}
+                >Settings
+            </Text>
         </View>
     )
 }
