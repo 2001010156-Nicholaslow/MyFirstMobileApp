@@ -9,7 +9,7 @@ export default function Settingscreen({navigation}){
                 >Settings
             </Text>
             <Text 
-                onPress={() => navigation.navigate('Screen for Options')}
+                onPress={() => navigation.navigate('List')}
                 >Settings
             </Text>
         </View>

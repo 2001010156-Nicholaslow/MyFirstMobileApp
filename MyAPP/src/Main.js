@@ -20,8 +20,8 @@ const HomeName = "Home";
 const PortName = "List";
 const SettingsName = "Settings";
 const AddName = "Add";
-const AddOptionName = "Screen for Options";
-const AddOtherName = "Screen for Others";
+const AddOptionName = "Options";
+const AddOtherName = "Others";
 const HistoryName = "Historyscreen";
 const OptionName = "Optionscreen";
 
@@ -46,6 +46,7 @@ const TabStack = () => {
 
             } else if (rn === SettingsName) {
               iconName = focused ? 'settings' : 'settings-outline';
+              
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -59,7 +60,7 @@ const TabStack = () => {
         }}>
 
         <Tab.Screen name={HomeName} component={HomeScreen} options={{ header: () => null }}/>
-        <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null }}/>
+        <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null }} />
         <Tab.Screen name={SettingsName} component={SettingsScreen} />
       </Tab.Navigator>
   );
