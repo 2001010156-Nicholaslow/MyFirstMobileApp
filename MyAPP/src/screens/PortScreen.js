@@ -18,7 +18,7 @@ function PortScreen({ navigation }) {
             <View style={{flex: 1 }}>
                 <Tab.Navigator style={{ paddingTop: 0, marginTop: 0 }}>
                     <Tab.Screen name="Options" component={Historyscreen} />
-                    <Tab.Screen name="Others" component={Optionscreen} />
+                    <Tab.Screen name="Stocks" component={Optionscreen} />
                 </Tab.Navigator>
             </View>
 

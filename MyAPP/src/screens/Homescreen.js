@@ -52,14 +52,6 @@ function Homescreen({ navigation }) {
                 </SafeAreaView>
             </Modal>
 
-
-
-            <View style={{ flex: 1, alignItems: 'center', bottom: '3%', right: '10%', position: 'absolute', }}>
-                <FontAwesome.Button name="plus" size={15} backgroundColor="#3b5998" onPress={() => navigation.navigate('Add')}>
-                    Add
-                </FontAwesome.Button>
-            </View>
-
         </View>
 
 
