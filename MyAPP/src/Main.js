@@ -60,11 +60,12 @@ const TabStack = () => {
         }}>
 
         <Tab.Screen name={HomeName} component={HomeScreen} options={{ header: () => null }}/>
-        <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null }} />
-        <Tab.Screen name={SettingsName} component={SettingsScreen} />
+        <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null}} />
+        <Tab.Screen name={SettingsName} component={SettingsScreen}  />
       </Tab.Navigator>
   );
 }
+
 
 const App = () => {
   return (

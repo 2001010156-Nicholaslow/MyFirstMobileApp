@@ -24,19 +24,6 @@ export default function AddOptionscreen({ navigation }) {
                 
             </View>
 
-            <Modal
-                entry="bottom"
-                animationDuration="30"
-                backdropPressToClose={true}
-                isOpen={modalVisible}
-                style={styles.modalBox}
-                onClosed={() => navigation.navigate('Home')}
-            >
-                <View style={styles.content}>
-                    <Text style={styles.textStyle}>Congrats</Text>
-                </View>
-            </Modal>
-
             <TouchableOpacity style={{ flex: 1, alignItems: 'center', bottom: '3%', right: '10%', position: 'absolute', }}>
                 <View>
                     <FontAwesome.Button name="plus" size={15} backgroundColor="#3b5998">
@@ -52,7 +39,7 @@ export default function AddOptionscreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#ffffff",
+        backgroundColor: "transparent",
         alignItems: "center",
         justifyContent: "center"
     },
