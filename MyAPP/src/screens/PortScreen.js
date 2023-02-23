@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions, SafeAreaView, Button, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Modal from "react-native-modalbox";
+import db from '../Database';
 
 const { width, height } = Dimensions.get("window");
-
-//Screens
-import Historyscreen from "../screens/Historyscreen";
-import Optionscreen from "../screens/Optionscreen";
 
 const HomeName = "Home";
 const PortName = "List";
@@ -20,6 +17,45 @@ function PortScreen({ navigation }) {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [portView, setPortView] = useState(true);
+    const [watchlist, setWatchlist] = useState([]);
+
+    useEffect(() => {
+        db.transaction(tx => {
+            tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL);',
+                [],
+                (_, result) => console.log('Table created:', result)
+            );
+        });
+
+        db.transaction(tx => {
+            // tx.executeSql(
+            //   'INSERT INTO watchlist (name, price) VALUES (?, ?);',
+            //   ['Banana Inc.', 142.90],
+            //   (_, { insertId }) => console.log('Row inserted with ID:', insertId),
+            //   (_, error) => console.log('Error inserting row:', error)
+            // );
+
+
+                // tx.executeSql(
+                //   'DELETE FROM watchlist;',
+                //   [],
+                //   (_, result) => console.log('Table cleared:', result)
+                // );
+             
+
+            tx.executeSql(
+                'SELECT * FROM watchlist;',
+                [],
+                (_, { rows }) => setWatchlist(rows._array),
+                (_, { rows }) => console.log('Result:', rows._array),
+                (_, error) => console.log('Error selecting rows:', error)
+            );
+        });
+
+
+        console.log("listofItems: ", watchlist);
+    }, []);
 
     const getModal = () => {
         return (
@@ -32,15 +68,15 @@ function PortScreen({ navigation }) {
             >
                 <View style={style.content}>
                     <TouchableOpacity
-                        onPress={() => setModalVisible(false)} 
+                        onPress={() => setModalVisible(false)}
                         style={style.btnContainer}
                     >
                         <Text style={style.textButton1}>
-                           My Portfolio
+                            My Portfolio
                         </Text>
-                        
+
                     </TouchableOpacity>
-                  
+
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Historyscreen')}
                         style={style.btnContainer}
@@ -55,35 +91,9 @@ function PortScreen({ navigation }) {
         );
     };
 
-    const testing =() =>{
-        <View style={style.port}>
-                <FontAwesome.Button
-                    name="angle-down"
-                    size={35}
-                    color="black"
-                    style={{ paddingTop: 0, marginTop: 0, fontWeight: 'bold', backgroundColor: "white" }}
-                    onPress={() => setModalVisible(true)}>
-                    My Portfolio
-                </FontAwesome.Button>
-                <View style={{ flexDirection: "row" }}>
-                </View>
-            </View>
-
-            {getModal()}
-
-            <TouchableOpacity style={{ flex: 1, alignItems: 'center', bottom: '3%', right: '10%', position: 'absolute', }}>
-                <View>
-                    <FontAwesome.Button name="plus" size={15} backgroundColor="#3b5998" onPress={() => navigation.navigate('Add')}>
-                        Add
-                    </FontAwesome.Button>
-                </View>
-            </TouchableOpacity>
-            
-    }
-
     return (
         <View style={style.container}>
-            
+
             <View style={style.port}>
                 <FontAwesome.Button
                     name="angle-down"
@@ -99,6 +109,18 @@ function PortScreen({ navigation }) {
 
             {getModal()}
 
+            <View>
+                <FlatList
+                    data={watchlist}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View>
+                            <Text>{item.name}</Text>
+                            <Text>{item.price}</Text>
+                        </View>
+                    )}
+                />
+            </View>
             <TouchableOpacity style={{ flex: 1, alignItems: 'center', bottom: '3%', right: '10%', position: 'absolute', }}>
                 <View>
                     <FontAwesome.Button name="plus" size={15} backgroundColor="#3b5998" onPress={() => navigation.navigate('Add')}>
@@ -158,7 +180,28 @@ const style = StyleSheet.create({
         marginTop: 2,
         width: "100%",
         borderBottomColor: "black",
-        borderBottomWidth : 1,
+        borderBottomWidth: 1,
+    }, item: {
+        marginBottom: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 5,
+    },
+    name: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'Black'
+    },
+    price: {
+        fontSize: 16,
+    },
+    text_input: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "gray",
+        borderRadius: 10,
+        marginTop: 10
     },
 })
 

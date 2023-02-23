@@ -4,18 +4,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Modal from "react-native-modalbox";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import db from '../Database';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get("window");
-
-const HomeName = "Home";
-const PortName = "List";
-const SettingsName = "Settings";
-
-import HomeScreen from "../screens/Homescreen";
-import PortScreem from "../screens/PortScreen";
-import SettingsScreen from "../screens/Settingscreen";
 
 const Tab = createMaterialTopTabNavigator();
 const BtTab = createBottomTabNavigator();
@@ -24,6 +16,18 @@ function Historyscreen({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [portView, setPortView] = useState(true);
+  const [watchlist, setWatchlist] = useState([]);
+
+  useEffect(() => {
+      db.transaction(tx => {
+          tx.executeSql(
+              'SELECT * FROM watchlist;',
+              [],
+              (_, { rows }) => setWatchlist(rows._array)
+          );
+      });
+     console.log("Item 1; " , watchlist[0])
+  }, []);
 
   const getModal = () => {
     return (
@@ -77,6 +81,17 @@ function Historyscreen({ navigation }) {
       </View>
 
       {getModal()}
+
+      <View>
+        <View style={style.container}>
+          {watchlist.map(item => (
+            <View style={style.item} key={item.id}>
+              <Text style={style.name}>{item.name}</Text>
+              <Text style={style.price}>{item.price}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
 
   )
@@ -131,6 +146,21 @@ const style = StyleSheet.create({
     width: "100%",
     borderBottomColor: "black",
     borderBottomWidth: 1,
+  },
+  item: {
+    marginBottom: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'Black'
+  },
+  price: {
+    fontSize: 16,
   },
 })
 
