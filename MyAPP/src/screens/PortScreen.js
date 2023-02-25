@@ -19,30 +19,50 @@ function PortScreen({ navigation }) {
     const [portView, setPortView] = useState(true);
     const [watchlist, setWatchlist] = useState([]);
 
+    const reloadpage = () => {
+        db.transaction(tx => {
+
+            tx.executeSql(
+                'SELECT * FROM watchlist;',
+                [],
+                (_, { rows }) => setWatchlist(rows._array),
+                (_, { rows }) => console.log('Result:', rows._array),
+                (_, error) => console.log('Error selecting rows:', error)
+            );
+        }
+        )
+    };
+
     useEffect(() => {
+
         db.transaction(tx => {
             tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL);',
+                'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
                 [],
                 (_, result) => console.log('Table created:', result)
             );
         });
 
         db.transaction(tx => {
+             tx.executeSql(
+               'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?, ?,?,?,?,?,?);',
+              [1, 'Banana Inc.', 12-2-2023, 142.90, 'Call', 15, 0],
+               (_, { insertId }) => console.log('Row inserted with ID:', insertId),
+               (_, error) => console.log('Error inserting row:', error)
+             );
+
             // tx.executeSql(
-            //   'INSERT INTO watchlist (name, price) VALUES (?, ?);',
-            //   ['Banana Inc.', 142.90],
-            //   (_, { insertId }) => console.log('Row inserted with ID:', insertId),
-            //   (_, error) => console.log('Error inserting row:', error)
+            //   'DROP watchlist;',
+            //   [],
+            //   (_, result) => console.log('Table cleared:', result)
             // );
 
+            // tx.executeSql(
+            //   'DELETE FROM watchlist;',
+            //   [],
+            //   (_, result) => console.log('Table cleared:', result)
+            // );
 
-                // tx.executeSql(
-                //   'DELETE FROM watchlist;',
-                //   [],
-                //   (_, result) => console.log('Table cleared:', result)
-                // );
-             
 
             tx.executeSql(
                 'SELECT * FROM watchlist;',
@@ -93,7 +113,7 @@ function PortScreen({ navigation }) {
 
     return (
         <View style={style.container}>
-
+            {reloadpage()}
             <View style={style.port}>
                 <FontAwesome.Button
                     name="angle-down"
@@ -114,9 +134,14 @@ function PortScreen({ navigation }) {
                     data={watchlist}
                     keyExtractor={item => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View>
+                        <View style={style.text_input}>
+                            <Text>{item.amt}</Text>
                             <Text>{item.name}</Text>
+                            <Text>{item.date}</Text>
+                            <Text>{item.strikeprice}</Text>
+                            <Text>{item.type}</Text>
                             <Text>{item.price}</Text>
+                            <Text></Text>
                         </View>
                     )}
                 />

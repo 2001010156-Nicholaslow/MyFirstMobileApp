@@ -4,6 +4,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import DateTimePicker from '@react-native-community/datetimepicker'; //ios
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import db from '../Database';
 
 
 function Addscreen({ navigation }) {
@@ -18,19 +19,42 @@ function Addscreen({ navigation }) {
     const [strickPrice, setStrickPrice] = useState("");
     const [stockGive, setStockGive] = useState("");
     const [inout, setInOut] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [finalDate, setFinalDate] = useState("")
 
     const actionData = [
         { key: '1', value: 'Options', },
         { key: '2', value: 'Deposit/Others' },
     ]
+    
+    const handelSave = () => {
+        setFinalDate(date.toISOString().split('T')[0])
+        //console.log(amount, stockName, finalDate, strickPrice, actionCallPut, stockGive)
+        db.transaction(tx => {
+            tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
+                [],
+                (_, result) => console.log('Table created:', result)
+            );
+        });
 
-    const [date, setDate] = useState(new Date());
+        db.transaction(tx => {
+            tx.executeSql(
+                'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?,?,?,?,?,?,?);',
+                [amount, stockName, finalDate, strickPrice, actionCallPut, stockGive, 0],
+                //[1, 'Shop', 12-12-2023, 15, 21, 12, 0],
+                (_, { insertId }) => alert(`Item has been successfully added`),
+                (_, error) => console.log('Error inserting row:', error)
+            );
+        })
+         navigation.navigate('Home')
+    };
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setDate(currentDate);
     };
-    
+
 
     const showMode = (currentMode) => {
         DateTimePickerAndroid.open({
@@ -65,14 +89,16 @@ function Addscreen({ navigation }) {
                 value={amount}
                 keyboardType='number-pad'
                 placeholder="Amount"
-                onChange={(e) => { setAmount(e.target.value) }}
+                onChangeText={(e) => { setAmount(e) }}
             />
 
             <TextInput
                 style={styles.text_input}
                 value={stockName}
                 placeholder="Symbol"
-                onChange={(e) => { setStockName(e.target.value) }}
+                //onChange={(e) => { setStockName(e.target.value) }}
+                onChangeText={(e) => { setStockName(e) }}
+
             />
 
             <View
@@ -82,7 +108,7 @@ function Addscreen({ navigation }) {
                     <FontAwesome.Button name="calendar" size={25} color="#3b5998" backgroundColor="transparent" onPress={showDatepicker} />
                 </View>
             </View>
-            
+
 
             <TextInput
                 style={styles.text_input}
@@ -90,26 +116,27 @@ function Addscreen({ navigation }) {
                 keyboardType='number-pad'
                 placeholder="Strick price"
                 onPress={showDatepicker}
-                onChange={(e) => { setStrickPrice(e.target.value) }}
+                onChangeText={(e) => { setStrickPrice(e) }}
             />
 
             <TextInput
                 style={styles.text_input}
                 value={actionCallPut}
                 placeholder="Type Call/Put"
-                onChange={(e) => { setActionCallPut(e.target.value) }}
+                onChangeText={(e) => { setActionCallPut(e) }}
             />
 
             <TextInput
                 style={styles.text_input}
                 value={stockGive}
                 keyboardType='number-pad'
-                placeholder="Price"
-                onChange={(e) => { setStockGive(e.target.value) }}
+                placeholder="Premium"
+                onChangeText={(e) => { setStockGive(e) }}
+
             />
 
             <TouchableOpacity
-                //onPress={handelSave}
+                onPress={handelSave}
                 style={styles.btnContainer}
             >
                 <Text style={styles.textButton}>
