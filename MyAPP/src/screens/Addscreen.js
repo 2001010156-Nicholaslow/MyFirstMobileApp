@@ -28,8 +28,8 @@ function Addscreen({ navigation }) {
     ]
     
     const handelSave = () => {
-        setFinalDate(date.toISOString().split('T')[0])
-        //console.log(amount, stockName, finalDate, strickPrice, actionCallPut, stockGive)
+        setFinalDate(date.getDate().toString() +"-"+ date.getMonth().toString() +"-"+ date.getFullYear().toString())
+        console.log(amount, stockName, finalDate, strickPrice, actionCallPut, stockGive)
         db.transaction(tx => {
             tx.executeSql(
                 'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
