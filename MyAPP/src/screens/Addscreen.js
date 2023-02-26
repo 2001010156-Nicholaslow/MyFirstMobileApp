@@ -28,9 +28,9 @@ function Addscreen({ navigation }) {
     ]
     
     const handelSave = () => {
-        setFinalDate(date.getDate().toString() +"-"+ date.getMonth().toString() +"-"+ date.getFullYear().toString())
-        console.log(amount, stockName, finalDate, strickPrice, actionCallPut, stockGive)
-        db.transaction(tx => {
+        // setFinalDate(date.getDate().toString() +"-"+ date.getMonth().toString() +"-"+ date.getFullYear().toString())
+        // console.log(amount, stockName, finalDate, strickPrice, actionCallPut, stockGive)
+         db.transaction(tx => {
             tx.executeSql(
                 'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
                 [],
@@ -41,7 +41,7 @@ function Addscreen({ navigation }) {
         db.transaction(tx => {
             tx.executeSql(
                 'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?,?,?,?,?,?,?);',
-                [amount, stockName, finalDate, strickPrice, actionCallPut, stockGive, 0],
+                [amount, stockName, date.getDate().toString() +"-"+ date.getMonth().toString() +"-"+ date.getFullYear().toString(), strickPrice, actionCallPut, stockGive, 0],
                 //[1, 'Shop', 12-12-2023, 15, 21, 12, 0],
                 (_, { insertId }) => alert(`Item has been successfully added`),
                 (_, error) => console.log('Error inserting row:', error)

@@ -46,7 +46,7 @@ function PortScreen({ navigation }) {
         db.transaction(tx => {
             //  tx.executeSql(
             //    'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?, ?,?,?,?,?,?);',
-            //   [1, 'Banana Inc.', 12-2-2023, 142.90, 'Call', 15, 0],
+            //   [1, 'Banana Inc.', '12-2-2023', 142.90, 'Call', 15, 0],
             //    (_, { insertId }) => console.log('Row inserted with ID:', insertId),
             //    (_, error) => console.log('Error inserting row:', error)
             //  );
