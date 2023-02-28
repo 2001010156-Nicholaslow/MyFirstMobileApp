@@ -69,13 +69,6 @@ const TabStack = () => {
 
 
 const App = () => {
-  useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
-        []    );
-    });
-  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home" headerMode="none">

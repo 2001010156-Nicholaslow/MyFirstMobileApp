@@ -5,7 +5,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Modal from "react-native-modalbox";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import db from '../Database';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get("window");
 
