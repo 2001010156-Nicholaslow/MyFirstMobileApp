@@ -202,10 +202,12 @@ function Homescreen({ navigation }) {
                         renderItem={({ item }) => (
                             <View style={styles.itemContainer}>
                                 <Text style={styles.itemTitle}>{item.name}</Text>
-                                <Text style={styles.itemDescription}>Date :{item.date}</Text>
-                                <Text style={styles.itemDescription}>Strike Price: {item.strikeprice}</Text>
-                                <Text style={styles.itemDescription}>Type : {item.type}</Text>
-                                <Text style={styles.itemDescription}>Premium : {item.price}</Text>
+                                <Text style={styles.itemDescription}>Date : {item.date}</Text>
+                                <Text style={styles.itemDescription}>Strike Price: ${item.strikeprice}</Text>
+                                <Text style={styles.itemDescription}>Type: {item.type}</Text>
+                                <Text style={styles.itemDescription}>Premium: {item.price}</Text>
+                                <Text style={styles.itemDescription}>Unit : {item.amt}</Text>
+
                             </View>
                         )}
                     />
@@ -364,13 +366,14 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     itemTitle: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 8
+        marginBottom: 7
     },
     itemDescription: {
-        fontSize: 14,
-        color: '#666'
+        fontSize: 16,
+        color: '#666',
+        padding: 0.8,
     },
 })
 export default Homescreen;
