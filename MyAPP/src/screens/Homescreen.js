@@ -36,36 +36,26 @@ function Homescreen({ navigation }) {
     useEffect(() => {
 
         db.transaction(tx => {
+            // tx.executeSql(
+            //     'DROP watchlist;',
+            //     [],
+            //     (_, result) => console.log('Table cleared:', result)
+            //   ); 
+
             tx.executeSql(
                 'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
                 [],
                 (_, result) => console.log('Table created:', result)
             );
-        });
-
-        db.transaction(tx => {
-            //  tx.executeSql(
-            //    'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?, ?,?,?,?,?,?);',
-            //   [1, 'Banana Inc.', '12-2-2023', 142.90, 'Call', 15, 0],
-            //    (_, { insertId }) => console.log('Row inserted with ID:', insertId),
-            //    (_, error) => console.log('Error inserting row:', error)
-            //  );
-
-            //  tx.executeSql(
-            //    'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?, ?,?,?,?,?,?);',
-            //   [1, 'Shop', '2-5-2023', 10, 'Call', 5, 0],
-            //    (_, { insertId }) => console.log('Row inserted with ID:', insertId),
-            //    (_, error) => console.log('Error inserting row:', error)
-            //  );
 
             tx.executeSql(
                 'SELECT * FROM watchlist;',
                 [],
                 (_, { rows }) => setWatchlist(rows._array),
                 (_, { rows }) => console.log('Result:', rows._array),
-                (_, error) => console.log('Error selecting rows:', error)
             );
         });
+      
     }, []);
 
     const data = {
@@ -115,7 +105,6 @@ function Homescreen({ navigation }) {
                     </View>
                 </SafeAreaView>
             </Modal>
-
             <View style={styles.container2}>
                 <View style={styles.textContainer}>
                     <View style={styles.topheader}>

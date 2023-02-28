@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions, SafeAreaView, Button, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, FlatList, SafeAreaView, Button, TouchableOpacity } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Modal from "react-native-modalbox";
@@ -14,18 +14,47 @@ const BtTab = createBottomTabNavigator();
 function Historyscreen({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [portView, setPortView] = useState(true);
+  const [popupBx, setpopupBx] = useState(false);
   const [watchlist, setWatchlist] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([]);
+
+  const handleItemSelected = (item) => {
+    setSelectedItem(item);
+    setpopupBx(true);
+  };
+
+  const handlePopUpClose = () => {
+    setSelectedItem([]);
+    setpopupBx(false);
+  }
+
+  const popupBxrender = () => {
+    return (
+      <Modal isOpen={popupBx} animationType="slide" style={styles.modalBox}>
+        <View style={styles.popupBxModal}>
+          <Text style={styles.itemTitle}>{selectedItem.name}</Text>
+          <Text style={styles.itemDescription}>Date : {selectedItem.date}</Text>
+          <Text style={styles.itemDescription}>Strike Price: ${selectedItem.strikeprice}</Text>
+          <Text style={styles.itemDescription}>Type: {selectedItem.type}</Text>
+          <Text style={styles.itemDescription}>Premium: {selectedItem.price}</Text>
+          <Text style={styles.itemDescription}>Unit : {selectedItem.amt}</Text>
+          <TouchableOpacity onPress={() => handlePopUpClose()} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )
+  }
 
   useEffect(() => {
-      db.transaction(tx => {
-          tx.executeSql(
-              'SELECT * FROM watchlist;',
-              [],
-              (_, { rows }) => setWatchlist(rows._array)
-          );
-      });
-     console.log("Item 1; " , watchlist[0])
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM watchlist;',
+        [],
+        (_, { rows }) => setWatchlist(rows._array)
+      );
+    });
+    console.log("Item 1; ", watchlist[0])
   }, []);
 
   const getModal = () => {
@@ -34,15 +63,15 @@ function Historyscreen({ navigation }) {
         entry="bottom"
         backdropPressToClose={true}
         isOpen={modalVisible}
-        style={style.modalBox}
+        style={styles.modalBox}
         onClosed={() => setModalVisible(false)}
       >
-        <View style={style.content}>
+        <View style={styles.content}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={style.btnContainer}
+            style={styles.btnContainer}
           >
-            <Text style={style.textButton}>
+            <Text style={styles.textButton}>
               My Portfolio
             </Text>
 
@@ -50,9 +79,9 @@ function Historyscreen({ navigation }) {
 
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            style={style.btnContainer}
+            style={styles.btnContainer}
           >
-            <Text style={style.textButton1}>
+            <Text style={styles.textButton1}>
               History
             </Text>
           </TouchableOpacity>
@@ -65,8 +94,8 @@ function Historyscreen({ navigation }) {
 
 
   return (
-    <View style={style.container}>
-      <View style={style.port}>
+    <View style={styles.container}>
+      <View style={styles.port}>
         <FontAwesome.Button
           name="angle-down"
           size={35}
@@ -81,14 +110,40 @@ function Historyscreen({ navigation }) {
 
       {getModal()}
 
-      <View>
-        <View style={style.container}>
-          {watchlist.map(item => (
-            <View style={style.item} key={item.id}>
-              <Text style={style.name}>{item.name}</Text>
-              <Text style={style.price}>{item.price}</Text>
-            </View>
-          ))}
+      <View style={styles.container}>
+        <View style={styles.containerDetails}>
+          <View style={styles.boxDetails}>
+            <Text style={styles.iconDetails}>$500</Text>
+            <Text style={styles.textDetails}>Total Money</Text>
+          </View>
+          <View style={styles.boxDetails}>
+            <Text style={styles.iconDetails}>$330</Text>
+            <Text style={styles.textDetails}>Invested</Text>
+          </View>
+          <View style={styles.boxDetails}>
+            <Text style={styles.iconDetails}>$22</Text>
+            <Text style={styles.textDetails}>P/L($)</Text>
+          </View>
+        </View>
+        <View>
+          <View style={styles.textInputHeader}>
+            <Text>Name</Text>
+            <Text style={{ left: 25 }}>Invested</Text>
+            <Text>Premium</Text>
+          </View>
+          <FlatList
+            data={watchlist}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleItemSelected(item)}>
+                <View style={styles.text_input}>
+                  <Text>{item.name}</Text>
+                  <Text>${item.strikeprice}</Text>
+                  <Text>${item.price}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
         </View>
       </View>
     </View>
@@ -96,7 +151,7 @@ function Historyscreen({ navigation }) {
   )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -160,6 +215,49 @@ const style = StyleSheet.create({
   },
   price: {
     fontSize: 16,
+  },
+  textInputHeader: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "gray",
+    borderRadius: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  text_input: {
+    padding: 13,
+    borderBottomWidth: 1,
+    borderColor: "gray",
+    borderRadius: 0,
+    marginTop: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  }, 
+  containerDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 10,
+    borderBottomColor: "black",
+    borderColor: "black"
+  },
+  boxDetails: {
+    flex: 1,
+    alignItems: 'center',
+    borderColor: 'grey',
+    paddingLeft: 10,
+  },
+  iconDetails: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  textDetails: {
+    fontSize: 16,
+    textAlign: 'center',
   },
 })
 

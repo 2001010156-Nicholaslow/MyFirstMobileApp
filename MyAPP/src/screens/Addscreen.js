@@ -154,14 +154,15 @@ const styles = StyleSheet.create({
     form: {
         padding: 15,
         // backgroundColor : "#e3e3e3",
-        marginTop: 10
+        marginTop: 14
     },
 
     txtClose: {
         fontSize: 18,
         fontWeight: "bold",
         marginVertical: 10,
-        textAlign: "right"
+        textAlign: "right",
+        paddingBottom: 2
     },
     text_input: {
         padding: 10,

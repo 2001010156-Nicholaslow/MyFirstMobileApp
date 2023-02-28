@@ -31,6 +31,23 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabStack = () => {
+  useEffect(() => {
+
+    db.transaction(tx => {
+        tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS watchlist (id INTEGER PRIMARY KEY AUTOINCREMENT, amt TEXT, name TEXT, date TEXT, strikeprice TEXT , type TEXT, price TEXT, filled TEXT);',
+            [],
+            (_, result) => console.log('Table created:', result)
+        );
+
+          tx.executeSql(
+            'INSERT INTO watchlist (amt, name, date, strikeprice, type, price, filled) VALUES (?, ?,?,?,?,?,?);',
+           [1, 'Banana Inc.', '12-2-2023', '142.90', 'Call', 15, 0],
+            (_, { insertId }) => console.log('Row inserted with ID:', insertId),
+            (_, error) => console.log('Error inserting row:', error)
+          );//Testing Data
+    });
+  },[])
   return (
     <Tab.Navigator
       initialRouteName={HomeName}
@@ -62,7 +79,7 @@ const TabStack = () => {
 
       <Tab.Screen name={HomeName} component={HomeScreen} options={{ header: () => null }} />
       <Tab.Screen name={PortName} component={PortScreem} options={{ header: () => null }} />
-      <Tab.Screen name={SettingsName} component={SettingsScreen} />
+      <Tab.Screen name={SettingsName} component={SettingsScreen} options={{ header: () => null }}/>
     </Tab.Navigator>
   );
 }
